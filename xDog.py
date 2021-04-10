@@ -3,11 +3,11 @@ import numpy as np
 
 img = cv2.imread("./sampleImages/s2.jpg", cv2.IMREAD_COLOR)
 
-cv2.imshow("Cute Kitens color", img)
+cv2.imshow("colored", img)
 
 img = cv2.imread("./sampleImages/s2.jpg", cv2.IMREAD_GRAYSCALE)
 
-# cv2.imshow("Cute Kitens", img)
+# cv2.imshow("Gray", img)
 
 
 sigma = 0.8
@@ -53,6 +53,10 @@ cv2.imshow("thresholded", thresholded)
 softThresholded = softThreshold(xdog2, epsilon, phi)
 
 cv2.imshow("softThresholded", softThresholded)
+
+bilateral = cv2.bilateralFilter(img, 15, 75, 75)
+
+cv2.imshow('bilateral.04', bilateral)
 
 cv2.waitKey(0)
 
