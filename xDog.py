@@ -53,10 +53,6 @@ softThresholded = softThreshold(xdog2, epsilon, phi)
 
 cv2.imshow("softThresholded", softThresholded)
 
-bilateral = cv2.bilateralFilter(img, 15, 75, 75)
-
-cv2.imshow('bilateral.04', bilateral)
-
 cv2.waitKey(0)
 
 cv2.destroyAllWindows()
