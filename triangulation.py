@@ -60,17 +60,18 @@ def make_delaunay(f_w, f_h, theList):
 	return list4
 
 def drawLines(img, points, listd):
+	img1 = img.copy()
 	for (x, y, z) in listd:
 		pt1 = (int(points[x][0]), int(points[x][1]))
 		pt2 = (int(points[y][0]), int(points[y][1]))
 		pt3 = (int(points[z][0]), int(points[z][1]))
-		cv2.line(img, pt3, pt1, (255, 255, 255), 1, 8, 0)
-		cv2.line(img, pt2, pt1, (255, 255, 255), 1, 8, 0)
-		cv2.line(img, pt3, pt2, (255, 255, 255), 1, 8, 0)
+		cv2.line(img1, pt3, pt1, (255, 255, 255), 1, 8, 0)
+		cv2.line(img1, pt2, pt1, (255, 255, 255), 1, 8, 0)
+		cv2.line(img1, pt3, pt2, (255, 255, 255), 1, 8, 0)
 
-	# cv2.imshow("Output", img)
-	# cv2.waitKey(0)
-	# cv2.destroyAllWindows()
+	cv2.imshow("Output", img1)
+	cv2.waitKey(0)
+	cv2.destroyAllWindows()
 
 def apply_affine_transform(src, srcTri, dstTri, size) :
 	
@@ -117,15 +118,15 @@ def morph_triangle(img1, img2, img, t1, t2, t, alpha) :
 	# Copy triangular region of the rectangular patch to the output image
 	img[r[1]:r[1]+r[3], r[0]:r[0]+r[2]] = img[r[1]:r[1]+r[3], r[0]:r[0]+r[2]] * ( 1 - mask ) + imgRect * mask
 
-def generate_morphed_image(imgPath1, imgPath2):
+def generate_morphed_image(img1, img2):
 
-	(img1, points1) = keypoints(imgPath1)
+	points1 = keypoints(img1)
 	# print(points, len(points))
 	listd1 = make_delaunay(img1.shape[1], img1.shape[0], points1)
 	# print(listd)
 	drawLines(img1, points1, listd1)
 
-	(img2, points2) = keypoints(imgPath2)
+	points2 = keypoints(img2)
 	# print(points, len(points))
 	listd2 = make_delaunay(img2.shape[1], img1.shape[0], points2)
 	# print(listd)
@@ -140,13 +141,24 @@ def generate_morphed_image(imgPath1, imgPath2):
 		t2 = [points2[x], points2[y], points2[z]]
 		t = [points1[x], points1[y], points1[z]]
 		morph_triangle(img1, img2, morphed_image, t1, t2, t, alpha)
+	morphed_image_with_lines = morphed_image.copy()
+	for i in range(len(listd1)):
+		t = [points1[x], points1[y], points1[z]]
 		pt1 = (int(t[0][0]), int(t[0][1]))
 		pt2 = (int(t[1][0]), int(t[1][1]))
 		pt3 = (int(t[2][0]), int(t[2][1]))
-		cv2.line(morphed_image, pt1, pt2, (255, 255, 255), 1, 8, 0)
-		cv2.line(morphed_image, pt2, pt3, (255, 255, 255), 1, 8, 0)
-		cv2.line(morphed_image, pt3, pt1, (255, 255, 255), 1, 8, 0)
+		cv2.line(morphed_image_with_lines, pt1, pt2, (255, 255, 255), 1, 8, 0)
+		cv2.line(morphed_image_with_lines, pt2, pt3, (255, 255, 255), 1, 8, 0)
+		cv2.line(morphed_image_with_lines, pt3, pt1, (255, 255, 255), 1, 8, 0)
 
-	cv2.imshow("Output", morphed_image)
+	cv2.imshow("Morphed Image", morphed_image)
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
+
+	return morphed_image 
+
+
+if __name__ == '__main__':
+    subject = cv2.imread('sampleImages/s2.jpg', 1)
+    target = cv2.imread('sampleImages/m1.jpg', 1)
+    morphed_image = generate_morphed_image(subject, target)

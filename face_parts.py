@@ -6,7 +6,7 @@ import dlib
 import cv2
 
 detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
+predictor = dlib.shape_predictor('facialRecognition/shape_predictor_68_face_landmarks.dat')
 
 def find_mask(image, betamap):
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -49,17 +49,17 @@ def find_mask(image, betamap):
 			dilation = cv2.dilate(mask,kernel,iterations = 4)
 			gradient = cv2.morphologyEx(noseMask, cv2.MORPH_GRADIENT, kernel)
 			gradient = cv2.dilate(gradient,kernel,iterations = 2)
-			cv2.imshow("Mask", mask)
-			cv2.imshow("Dilated Mask", dilation)
-			cv2.imshow("Nose Mask", gradient)
-			cv2.waitKey(0)
-			cv2.destroyAllWindows()
+			# cv2.imshow("Mask", mask)
+			# cv2.imshow("Dilated Mask", dilation)
+			# cv2.imshow("Nose Mask", gradient)
+			# cv2.waitKey(0)
+			# cv2.destroyAllWindows()
 			mask = dilation+gradient
 
 
 		return mask
 
 if __name__ == '__main__':
-	image = cv2.imread('subject.jpg', 1)
+	image = cv2.imread('sampleImages/subject.jpg', 1)
 	image = imutils.resize(image, width=500)
 	find_mask(image, True)

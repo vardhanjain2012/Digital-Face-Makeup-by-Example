@@ -1,10 +1,10 @@
 import cv2
 import numpy as np
-img = cv2.imread("./sampleImages/s2.jpg", cv2.IMREAD_COLOR)
+img = cv2.imread("./sampleImages/s1.jpg", cv2.IMREAD_COLOR)
 
 cv2.imshow("colored", img)
 
-img = cv2.imread("./sampleImages/s2.jpg", cv2.IMREAD_GRAYSCALE)
+img = cv2.imread("./sampleImages/s1.jpg", cv2.IMREAD_GRAYSCALE)
 
 # cv2.imshow("Gray", img)
 
